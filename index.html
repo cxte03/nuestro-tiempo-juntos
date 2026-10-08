@@ -5,7 +5,7 @@
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Nuestro Tiempo Juntos</title>
     <style>
-        /* Aquí le damos estilo a la página */
+
         body {
             font-family: 'Courier New', Courier, monospace; /* Tipo de letra de programador */
             background-color: #282c34; /* Fondo oscuro estilo editor de código */
@@ -48,21 +48,18 @@
 </head>
 <body>
     <div class="contenedor">
-        <h1>console.log("Te quiero"); ❤️</h1>
+        <h1>Te quiero❤️</h1>
         
-        <!-- ESTA ES LA FOTO: Asegúrate de que el nombre del archivo coincida -->
         <img src="foto.jpg" alt="Nosotros">
         
-        <p>Tiempo en ejecución desde nuestra primera cita:</p>
+        <p>Tiempo vamos juntitos:</p>
         
         <div class="reloj" id="contador">Cargando datos...</div>
         
-        <p class="mensaje">Eres mi mejor proyecto.</p>
+        <p class="mensaje">Eres el amor de mi vida </p>
     </div>
 
     <script>
-        // ¡ATENCIÓN! Cambia la fecha de abajo por vuestro aniversario.
-        // Formato: AÑO-MES-DIA y la hora T00:00:00 (Año-Mes-DíaTHora:Minuto:Segundo)
         const fechaInicio = new Date("2024-10-19T11:30:00").getTime();
 
         function actualizarReloj() {
@@ -81,7 +78,6 @@
                 segundos + " segundos";
         }
 
-        // Esto hace que el reloj se actualice cada segundo
         setInterval(actualizarReloj, 1000);
         actualizarReloj();
     </script>
