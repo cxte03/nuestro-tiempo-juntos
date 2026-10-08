@@ -55,34 +55,7 @@
             margin-bottom: 10px;
         }
         
-        /* --- ESTILOS DE LA TERMINAL DE COMMITS --- */
-        .terminal {
-            background-color: #1e1e1e;
-            border-radius: 8px;
-            padding: 15px;
-            text-align: left;
-            margin-top: 30px;
-            font-size: 0.9em;
-            border: 1px solid #111;
-            box-shadow: inset 0 0 10px rgba(0,0,0,0.5);
-        }
-        .terminal-header {
-            color: #5c6370;
-            margin-bottom: 15px;
-            border-bottom: 1px dashed #5c6370;
-            padding-bottom: 8px;
-            font-size: 0.85em;
-        }
-        .commit {
-            margin-bottom: 12px;
-            line-height: 1.4;
-        }
-        .hash { color: #d19a66; font-weight: bold; }
-        .comando { color: #56b6c2; }
-        .msg { color: #98c379; }
-        .date { color: #5c6370; font-style: italic; padding-left: 15px; font-size: 0.85em; }
-        
-        /* --- ESTILOS DEL EASTER EGG --- */
+        /* --- ESTILOS DE LOS ICONOS OCULTOS --- */
         .icono-huevo {
             position: absolute;
             bottom: 15px;
@@ -96,8 +69,22 @@
             opacity: 1; 
             transform: scale(1.2);
         }
+        .icono-commits {
+            position: absolute;
+            bottom: 15px;
+            left: 20px; /* Lo ponemos a la izquierda */
+            font-size: 20px;
+            cursor: pointer;
+            opacity: 0.1; 
+            transition: all 0.3s;
+        }
+        .icono-commits:hover {
+            opacity: 1; 
+            transform: scale(1.2);
+        }
 
-        #modal-vale {
+        /* --- ESTILOS DE LAS VENTANAS EMERGENTES (MODALES) --- */
+        #modal-vale, #modal-commits {
             display: none; 
             position: fixed; 
             top: 0; left: 0; width: 100%; height: 100%; 
@@ -134,9 +121,36 @@
         .btn-cerrar:hover {
             background-color: #be5058;
         }
+
+        /* Estilos de la terminal dentro de la ventana emergente */
+        .terminal {
+            background-color: #1e1e1e;
+            border-radius: 8px;
+            padding: 20px;
+            text-align: left;
+            font-size: 0.9em;
+            border: 1px solid #333;
+            box-shadow: 0 10px 30px rgba(0,0,0,1);
+            width: 85%;
+            max-width: 400px;
+            animation: aparecer 0.3s ease-out;
+        }
+        .terminal-header {
+            color: #5c6370;
+            margin-bottom: 15px;
+            border-bottom: 1px dashed #5c6370;
+            padding-bottom: 8px;
+            font-size: 0.85em;
+        }
+        .commit { margin-bottom: 15px; line-height: 1.4; }
+        .hash { color: #d19a66; font-weight: bold; }
+        .comando { color: #56b6c2; }
+        .msg { color: #98c379; }
+        .date { color: #5c6370; font-style: italic; padding-left: 15px; font-size: 0.85em; }
     </style>
 </head>
 <body>
+    <!-- PÁGINA PRINCIPAL (Exactamente como la tenías) -->
     <div class="contenedor">
         <h1>Te quiero ❤️</h1>
         
@@ -144,85 +158,14 @@
         
         <p>Cuanto tiempo llevas haciendome la persona más feliz del mundo:</p>
         
-        <!-- Elementos vacíos por defecto para que no salga "Cargando datos..." -->
-        <div class="reloj" id="contador-anios"></div>
-        <div class="separador" id="linea-separadora" style="display: none;">Que en total son exactamente:</div>
-        <div class="reloj" id="contador-dias"></div>
+        <div class="reloj" id="contador-anios">Cargando datos...</div>
+        
+        <div class="separador">Que en total son exactamente:</div>
+        
+        <div class="reloj" id="contador-dias">Cargando datos...</div>
         
         <p class="mensaje">Eres el amor de mi vida &lt;3</p>
 
-        <!-- --- HISTORIAL DE COMMITS --- -->
-        <div class="terminal">
-            <div class="terminal-header">~ bash - git log --oneline</div>
-            
-            <div class="commit">
-                <div><span class="hash">24a7c1b</span> <span class="comando">git commit -m </span><span class="msg">"Primer beso 💋"</span></div>
-                <div class="date" id="time-beso"></div>
-            </div>
-            
-            <div class="commit">
-                <div><span class="hash">44b1v16</span> <span class="comando">git commit -m </span><span class="msg">"Primer viaje juntos ✈️"</span></div>
-                <div class="date" id="time-viaje1"></div>
-            </div>
-
-            <div class="commit">
-                <div><span class="hash">25c4x27</span> <span class="comando">git commit -m </span><span class="msg">"Primer concierto 🎸"</span></div>
-                <div class="date" id="time-concierto"></div>
-            </div>
-
-            <div class="commit">
-                <div><span class="hash">26d9z01</span> <span class="comando">git commit -m </span><span class="msg">"Viaje a Bélgica 🇧🇪"</span></div>
-                <div class="date" id="time-belgica"></div>
-            </div>
-        </div>
-
-        <div class="icono-huevo" onclick="abrirVale()" title="¿Qué es esto?">🐕</div>
-    </div>
-
-    <div id="modal-vale">
-        <img src="vale_perro.jpg" alt="Vale por un perro salchicha">
-        <button class="btn-cerrar" onclick="cerrarVale()">¡Acepto el trato!</button>
-    </div>
-
-    <script>
-        // Fechas corregidas al formato universal (YYYY/MM/DD) para que no fallen en ningún móvil
-        const inicio = new Date("2024/10/19 11:30:00");
-
-        function actualizarReloj() {
-            const ahora = new Date();
-            const diferencia = ahora.getTime() - inicio.getTime();
-            
-            if (diferencia < 0) {
-                document.getElementById("contador-dias").innerHTML = "¡Próximamente! ❤️";
-                return;
-            }
-            
-            const totalDias = Math.floor(diferencia / (1000 * 60 * 60 * 24));
-            const horas = Math.floor((diferencia % (1000 * 60 * 60 * 24)) / (1000 * 60 * 60));
-            const minutos = Math.floor((diferencia % (1000 * 60 * 60)) / (1000 * 60));
-            const segundos = Math.floor((diferencia % (1000 * 60)) / 1000);
-
-            document.getElementById("contador-dias").innerHTML = 
-                totalDias + " días <br>" + 
-                horas + " horas <br>" + 
-                minutos + " minutos <br>" + 
-                segundos + " segundos";
-
-            let anios = ahora.getFullYear() - inicio.getFullYear();
-            let meses = ahora.getMonth() - inicio.getMonth();
-            let dias = ahora.getDate() - inicio.getDate();
-
-            if (dias < 0) {
-                meses--;
-                const ultimoDiaMesAnterior = new Date(ahora.getFullYear(), ahora.getMonth(), 0).getDate();
-                dias += ultimoDiaMesAnterior;
-            }
-            if (meses < 0) {
-                anios--;
-                meses += 12;
-            }
-
-            let textoAnios = "";
-            if (anios > 0) textoAnios += anios + (anios === 1 ? " año <br>" : " años <br>");
-            if (meses > 0) textoAnios += meses + (meses === 1 ? " mes <br>" : " meses <br>");
-            textoAnios += dias + (dias
+        <!-- Botones ocultos -->
+        <div class="icono-commits" onclick="abrirCommits()" title="Historial">💻</div>
+        <div class="icono-huevo" onclick="abrirVale()" title="¿Qué es esto?">🐕
