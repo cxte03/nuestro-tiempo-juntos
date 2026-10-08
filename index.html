@@ -60,27 +60,23 @@
         
         <img src="Fondo.png" alt="Nosotros">
         
-        <p>Cuanto tiempo llevas haciendome la persona más feliz:</p>
+        <p>Cuanto tiempo llevas haciendome la persona más feliz del mundo:</p>
         
-        <!-- Primer contador: Años, meses y días -->
         <div class="reloj" id="contador-anios">Cargando datos...</div>
         
         <div class="separador">Que en total son exactamente:</div>
         
-        <!-- Segundo contador (el original): Días totales, horas, minutos, segundos -->
         <div class="reloj" id="contador-dias">Cargando datos...</div>
         
         <p class="mensaje">Eres el amor de mi vida &lt;3</p>
     </div>
 
     <script>
-        // ¡ATENCIÓN! Cambia esta fecha por el día y hora de vuestro aniversario.
         const inicio = new Date("2024-10-19T11:30:00");
 
         function actualizarReloj() {
             const ahora = new Date();
             
-            // 1. CÁLCULO PARA EL CONTADOR ORIGINAL (Días totales, horas, minutos, segundos)
             const diferencia = ahora.getTime() - inicio.getTime();
             const totalDias = Math.floor(diferencia / (1000 * 60 * 60 * 24));
             const horas = Math.floor((diferencia % (1000 * 60 * 60 * 24)) / (1000 * 60 * 60));
@@ -93,7 +89,6 @@
                 minutos + " minutos <br>" + 
                 segundos + " segundos";
 
-            // 2. CÁLCULO PARA EL NUEVO CONTADOR (Años, meses y días)
             let anios = ahora.getFullYear() - inicio.getFullYear();
             let meses = ahora.getMonth() - inicio.getMonth();
             let dias = ahora.getDate() - inicio.getDate();
@@ -114,7 +109,6 @@
             if (meses > 0) textoAnios += meses + (meses === 1 ? " mes <br>" : " meses <br>");
             textoAnios += dias + (dias === 1 ? " día" : " días");
 
-            // Si lleváis menos de un mes, no mostramos el de arriba porque es igual al de abajo
             if (anios === 0 && meses === 0) {
                 document.getElementById("contador-anios").style.display = "none";
                 document.querySelector(".separador").style.display = "none";
