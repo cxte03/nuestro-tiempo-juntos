@@ -144,11 +144,10 @@
         
         <p>Cuanto tiempo llevas haciendome la persona más feliz del mundo:</p>
         
-        <div class="reloj" id="contador-anios">Cargando datos...</div>
-        
-        <div class="separador">Que en total son exactamente:</div>
-        
-        <div class="reloj" id="contador-dias">Cargando datos...</div>
+        <!-- Elementos vacíos por defecto para que no salga "Cargando datos..." -->
+        <div class="reloj" id="contador-anios"></div>
+        <div class="separador" id="linea-separadora" style="display: none;">Que en total son exactamente:</div>
+        <div class="reloj" id="contador-dias"></div>
         
         <p class="mensaje">Eres el amor de mi vida &lt;3</p>
 
@@ -158,22 +157,22 @@
             
             <div class="commit">
                 <div><span class="hash">24a7c1b</span> <span class="comando">git commit -m </span><span class="msg">"Primer beso 💋"</span></div>
-                <div class="date" id="time-beso">Calculando...</div>
+                <div class="date" id="time-beso"></div>
             </div>
             
             <div class="commit">
                 <div><span class="hash">44b1v16</span> <span class="comando">git commit -m </span><span class="msg">"Primer viaje juntos ✈️"</span></div>
-                <div class="date" id="time-viaje1">Calculando...</div>
+                <div class="date" id="time-viaje1"></div>
             </div>
 
             <div class="commit">
                 <div><span class="hash">25c4x27</span> <span class="comando">git commit -m </span><span class="msg">"Primer concierto 🎸"</span></div>
-                <div class="date" id="time-concierto">Calculando...</div>
+                <div class="date" id="time-concierto"></div>
             </div>
 
             <div class="commit">
                 <div><span class="hash">26d9z01</span> <span class="comando">git commit -m </span><span class="msg">"Viaje a Bélgica 🇧🇪"</span></div>
-                <div class="date" id="time-belgica">Calculando...</div>
+                <div class="date" id="time-belgica"></div>
             </div>
         </div>
 
@@ -186,11 +185,17 @@
     </div>
 
     <script>
-        const inicio = new Date("2024-10-19T11:30:00");
+        // Fechas corregidas al formato universal (YYYY/MM/DD) para que no fallen en ningún móvil
+        const inicio = new Date("2024/10/19 11:30:00");
 
         function actualizarReloj() {
             const ahora = new Date();
             const diferencia = ahora.getTime() - inicio.getTime();
+            
+            if (diferencia < 0) {
+                document.getElementById("contador-dias").innerHTML = "¡Próximamente! ❤️";
+                return;
+            }
             
             const totalDias = Math.floor(diferencia / (1000 * 60 * 60 * 24));
             const horas = Math.floor((diferencia % (1000 * 60 * 60 * 24)) / (1000 * 60 * 60));
@@ -206,3 +211,18 @@
             let anios = ahora.getFullYear() - inicio.getFullYear();
             let meses = ahora.getMonth() - inicio.getMonth();
             let dias = ahora.getDate() - inicio.getDate();
+
+            if (dias < 0) {
+                meses--;
+                const ultimoDiaMesAnterior = new Date(ahora.getFullYear(), ahora.getMonth(), 0).getDate();
+                dias += ultimoDiaMesAnterior;
+            }
+            if (meses < 0) {
+                anios--;
+                meses += 12;
+            }
+
+            let textoAnios = "";
+            if (anios > 0) textoAnios += anios + (anios === 1 ? " año <br>" : " años <br>");
+            if (meses > 0) textoAnios += meses + (meses === 1 ? " mes <br>" : " meses <br>");
+            textoAnios += dias + (dias
