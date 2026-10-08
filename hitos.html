@@ -43,7 +43,7 @@
         }
         .reloj-hito {
             color: #98c379;
-            font-size: 1em;
+            font-size: 1.1em;
             line-height: 1.5;
         }
         .btn-volver {
@@ -77,7 +77,6 @@
 
     <script>
         // Lista con todos vuestros momentos y fechas
-        // Formato: AÑO-MES-DIA
         const eventos = [
             { id: "beso", nombre: "Nuestro primer beso", fecha: new Date("2024-07-27T00:00:00") },
             { id: "tequiero", nombre: 'La primera vez que me dijo "Te quiero"', fecha: new Date("2024-10-18T00:00:00") },
@@ -98,25 +97,41 @@
             `;
         });
 
-        // Función que actualiza todos los cronómetros a la vez
+        // Función que actualiza los hitos en formato años/meses/días
         function actualizarTodosLosHitos() {
-            const ahora = new Date().getTime();
+            const ahora = new Date();
 
             eventos.forEach(evento => {
-                const diferencia = ahora - evento.fecha.getTime();
-                
-                const dias = Math.floor(diferencia / (1000 * 60 * 60 * 24));
-                const horas = Math.floor((diferencia % (1000 * 60 * 60 * 24)) / (1000 * 60 * 60));
-                const minutos = Math.floor((diferencia % (1000 * 60 * 60)) / (1000 * 60));
-                const segundos = Math.floor((diferencia % (1000 * 60)) / 1000);
+                let anios = ahora.getFullYear() - evento.fecha.getFullYear();
+                let meses = ahora.getMonth() - evento.fecha.getMonth();
+                let dias = ahora.getDate() - evento.fecha.getDate();
 
-                // Formateamos el texto para que quede compacto
-                const textoReloj = `${dias} días, ${horas}h, ${minutos}m, ${segundos}s`;
+                if (dias < 0) {
+                    meses--;
+                    const ultimoDiaMesAnterior = new Date(ahora.getFullYear(), ahora.getMonth(), 0).getDate();
+                    dias += ultimoDiaMesAnterior;
+                }
+
+                if (meses < 0) {
+                    anios--;
+                    meses += 12;
+                }
+
+                let textoReloj = "";
+                if (anios > 0) textoReloj += anios + (anios === 1 ? " año, " : " años, ");
+                if (meses > 0) textoReloj += meses + (meses === 1 ? " mes, " : " meses, ");
+                textoReloj += dias + (dias === 1 ? " día" : " días");
+
+                // Por si da la casualidad de que el evento fue hoy mismo
+                if (anios === 0 && meses === 0 && dias === 0) {
+                    textoReloj = "¡Hoy!";
+                }
+
                 document.getElementById(`contador-${evento.id}`).innerHTML = textoReloj;
             });
         }
 
-        // Ejecutar cada segundo
+        // Ejecutar la función
         setInterval(actualizarTodosLosHitos, 1000);
         actualizarTodosLosHitos();
     </script>
