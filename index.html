@@ -40,7 +40,7 @@
             color: #98c379;
             margin: 15px 0;
             line-height: 1.6;
-       }
+        }
         .separador {
            font-size: 0.9em;
             color: #5c6370;
@@ -55,7 +55,25 @@
             margin-bottom: 10px;
         }
         
-    
+        /* ESTILOS DEL NUEVO BOTÓN */
+        .btn-enlaces {
+            display: inline-block;
+            margin-top: 15px;
+            padding: 10px 25px;
+            background-color: #61afef;
+            color: #282c34;
+            text-decoration: none;
+            border-radius: 8px;
+            font-weight: bold;
+            font-size: 1.1em;
+            transition: 0.3s;
+        }
+        .btn-enlaces:hover {
+            background-color: #4a8bc2;
+            transform: scale(1.05);
+        }
+        /* ----------------------- */
+
         .icono-huevo {
             position: absolute;
             bottom: 15px;
@@ -117,10 +135,14 @@
         <div class="reloj" id="contador-anios">Cargando datos...</div>
         <div class="separador">Que en total son exactamente:</div>
         <div class="reloj" id="contador-dias">Cargando datos...</div>
+        
         <p class="mensaje">Eres el amor de mi vida &lt;3</p>
+        
+        <!-- ESTE ES EL NUEVO BOTÓN -->
+        <a href="hitos.html" class="btn-enlaces">Tiempo desde...</a>
+        
         <div class="icono-huevo" onclick="abrirVale()" title="¿Qué es esto?">🐕</div>
     </div>
-
 
     <div id="modal-vale">
         <img src="vale_perro.jpg" alt="Vale por un perro salchicha">
@@ -184,5 +206,4 @@
         }
     </script>
 </body>
-
 </html>
