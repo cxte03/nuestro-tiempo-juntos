@@ -40,9 +40,9 @@
             color: #98c379;
             margin: 15px 0;
             line-height: 1.6;
-        }
+       }
         .separador {
-            font-size: 0.9em;
+           font-size: 0.9em;
             color: #5c6370;
             margin: 20px 0 5px 0;
             border-top: 1px dashed #5c6370;
@@ -55,7 +55,7 @@
             margin-bottom: 10px;
         }
         
-        /* --- ESTILOS DE LOS ICONOS OCULTOS --- */
+    
         .icono-huevo {
             position: absolute;
             bottom: 15px;
@@ -65,26 +65,12 @@
             opacity: 0.1; 
             transition: all 0.3s;
         }
-        .icono-huevo:hover {
-            opacity: 1; 
-            transform: scale(1.2);
-        }
-        .icono-commits {
-            position: absolute;
-            bottom: 15px;
-            left: 20px; 
-            font-size: 20px;
-            cursor: pointer;
-            opacity: 0.1; 
-            transition: all 0.3s;
-        }
-        .icono-commits:hover {
+       .icono-huevo:hover {
             opacity: 1; 
             transform: scale(1.2);
         }
 
-        /* --- ESTILOS DE LAS VENTANAS EMERGENTES (MODALES) --- */
-        #modal-vale, #modal-commits {
+        #modal-vale {
             display: none; 
             position: fixed; 
             top: 0; left: 0; width: 100%; height: 100%; 
@@ -99,7 +85,7 @@
             max-height: 70%;
             border-radius: 15px;
             box-shadow: 0 10px 30px rgba(0,0,0,1);
-            animation: aparecer 0.4s ease-out;
+           animation: aparecer 0.4s ease-out;
         }
         @keyframes aparecer {
             from { transform: scale(0.5); opacity: 0; }
@@ -121,107 +107,33 @@
         .btn-cerrar:hover {
             background-color: #be5058;
         }
-
-        /* Estilos de la terminal dentro de la ventana emergente */
-        .terminal {
-            background-color: #1e1e1e;
-            border-radius: 8px;
-            padding: 20px;
-            text-align: left;
-            font-size: 0.9em;
-            border: 1px solid #333;
-            box-shadow: 0 10px 30px rgba(0,0,0,1);
-            width: 85%;
-            max-width: 400px;
-            animation: aparecer 0.3s ease-out;
-        }
-        .terminal-header {
-            color: #5c6370;
-            margin-bottom: 15px;
-            border-bottom: 1px dashed #5c6370;
-            padding-bottom: 8px;
-            font-size: 0.85em;
-        }
-        .commit { margin-bottom: 15px; line-height: 1.4; }
-        .hash { color: #d19a66; font-weight: bold; }
-        .comando { color: #56b6c2; }
-        .msg { color: #98c379; }
-        .date { color: #5c6370; font-style: italic; padding-left: 15px; font-size: 0.85em; }
     </style>
 </head>
 <body>
-    <!-- PÁGINA PRINCIPAL -->
     <div class="contenedor">
         <h1>Te quiero ❤️</h1>
-        
         <img src="Fondo.png" alt="Nosotros" class="foto-principal">
-        
         <p>Cuanto tiempo llevas haciendome la persona más feliz del mundo:</p>
-        
-        <!-- Elementos vacíos por defecto -->
-        <div class="reloj" id="contador-anios"></div>
-        
-        <div class="separador" id="linea-separadora" style="display: none;">Que en total son exactamente:</div>
-        
-        <div class="reloj" id="contador-dias"></div>
-        
+        <div class="reloj" id="contador-anios">Cargando datos...</div>
+        <div class="separador">Que en total son exactamente:</div>
+        <div class="reloj" id="contador-dias">Cargando datos...</div>
         <p class="mensaje">Eres el amor de mi vida &lt;3</p>
-
-        <!-- Botones ocultos -->
-        <div class="icono-commits" onclick="abrirCommits()" title="Historial">💻</div>
         <div class="icono-huevo" onclick="abrirVale()" title="¿Qué es esto?">🐕</div>
     </div>
 
-    <!-- VENTANA 1: EL VALE -->
+
     <div id="modal-vale">
         <img src="vale_perro.jpg" alt="Vale por un perro salchicha">
         <button class="btn-cerrar" onclick="cerrarVale()">¡Acepto el trato!</button>
     </div>
 
-    <!-- VENTANA 2: LOS COMMITS -->
-    <div id="modal-commits">
-        <div class="terminal">
-            <div class="terminal-header">~ bash - git log --oneline</div>
-            
-            <div class="commit">
-                <div><span class="hash">24a7c1b</span> <span class="comando">git commit -m </span><span class="msg">"Primer beso 💋"</span></div>
-                <div class="date" id="time-beso"></div>
-            </div>
-            
-            <div class="commit">
-                <div><span class="hash">44b1v16</span> <span class="comando">git commit -m </span><span class="msg">"Primer viaje juntos ✈️"</span></div>
-                <div class="date" id="time-viaje1"></div>
-            </div>
-
-            <div class="commit">
-                <div><span class="hash">25c4x27</span> <span class="comando">git commit -m </span><span class="msg">"Primer concierto 🎸"</span></div>
-                <div class="date" id="time-concierto"></div>
-            </div>
-
-            <div class="commit">
-                <div><span class="hash">26d9z01</span> <span class="comando">git commit -m </span><span class="msg">"Viaje a Bélgica 🇧🇪"</span></div>
-                <div class="date" id="time-belgica"></div>
-            </div>
-
-            <div style="text-align: center; margin-top: 25px;">
-                <button class="btn-cerrar" onclick="cerrarCommits()">Cerrar terminal</button>
-            </div>
-        </div>
-    </div>
-
     <script>
-        // --- FECHAS CON BARRAS: SOLUCIÓN PARA IPHONE ---
-        const inicio = new Date("2024/10/19 11:30:00");
+        const inicio = new Date("2024-10-19T11:30:00");
 
         function actualizarReloj() {
             const ahora = new Date();
             const diferencia = ahora.getTime() - inicio.getTime();
             
-            if (diferencia < 0) {
-                document.getElementById("contador-dias").innerHTML = "¡Próximamente! ❤️";
-                return;
-            }
-
             const totalDias = Math.floor(diferencia / (1000 * 60 * 60 * 24));
             const horas = Math.floor((diferencia % (1000 * 60 * 60 * 24)) / (1000 * 60 * 60));
             const minutos = Math.floor((diferencia % (1000 * 60 * 60)) / (1000 * 60));
@@ -248,4 +160,29 @@
             }
 
             let textoAnios = "";
-            if (anios > 0) textoAnios += anios + (anios === 1 ? " año <br>"
+            if (anios > 0) textoAnios += anios + (anios === 1 ? " año <br>" : " años <br>");
+            if (meses > 0) textoAnios += meses + (meses === 1 ? " mes <br>" : " meses <br>");
+            textoAnios += dias + (dias === 1 ? " día" : " días");
+
+            if (anios === 0 && meses === 0) {
+                document.getElementById("contador-anios").style.display = "none";
+                document.querySelector(".separador").style.display = "none";
+            } else {
+                document.getElementById("contador-anios").innerHTML = textoAnios;
+            }
+        }
+
+        setInterval(actualizarReloj, 1000);
+        actualizarReloj();
+
+        function abrirVale() {
+            document.getElementById("modal-vale").style.display = "flex";
+        }
+
+        function cerrarVale() {
+            document.getElementById("modal-vale").style.display = "none";
+        }
+    </script>
+</body>
+
+</html>
