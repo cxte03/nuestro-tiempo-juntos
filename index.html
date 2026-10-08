@@ -1,0 +1,89 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Nuestro Tiempo Juntos</title>
+    <style>
+        /* Aquí le damos estilo a la página */
+        body {
+            font-family: 'Courier New', Courier, monospace; /* Tipo de letra de programador */
+            background-color: #282c34; /* Fondo oscuro estilo editor de código */
+            color: #abb2bf;
+            text-align: center;
+            padding: 40px 20px;
+            margin: 0;
+        }
+        .contenedor {
+            background: #21252b;
+            padding: 30px;
+            border-radius: 15px;
+            box-shadow: 0 10px 20px rgba(0,0,0,0.5);
+            max-width: 90%;
+            width: 400px;
+            margin: 0 auto;
+        }
+        h1 {
+            color: #e06c75; /* Un tono rosa/rojizo bonito */
+            font-size: 1.5em;
+        }
+        img {
+            max-width: 100%;
+            border-radius: 10px;
+            margin-top: 15px;
+            margin-bottom: 20px;
+        }
+        .reloj {
+            font-size: 1.2em;
+            font-weight: bold;
+            color: #98c379; /* Verde estilo código */
+            margin: 20px 0;
+            line-height: 1.6;
+        }
+        .mensaje {
+            color: #61afef; /* Azul claro */
+            font-style: italic;
+        }
+    </style>
+</head>
+<body>
+    <div class="contenedor">
+        <h1>console.log("Te quiero"); ❤️</h1>
+        
+        <!-- ESTA ES LA FOTO: Asegúrate de que el nombre del archivo coincida -->
+        <img src="foto.jpg" alt="Nosotros">
+        
+        <p>Tiempo en ejecución desde nuestra primera cita:</p>
+        
+        <div class="reloj" id="contador">Cargando datos...</div>
+        
+        <p class="mensaje">Eres mi mejor proyecto.</p>
+    </div>
+
+    <script>
+        // ¡ATENCIÓN! Cambia la fecha de abajo por vuestro aniversario.
+        // Formato: AÑO-MES-DIA y la hora T00:00:00 (Año-Mes-DíaTHora:Minuto:Segundo)
+        const fechaInicio = new Date("2024-10-19T11:30:00").getTime();
+
+        function actualizarReloj() {
+            const ahora = new Date().getTime();
+            const diferencia = ahora - fechaInicio;
+
+            const dias = Math.floor(diferencia / (1000 * 60 * 60 * 24));
+            const horas = Math.floor((diferencia % (1000 * 60 * 60 * 24)) / (1000 * 60 * 60));
+            const minutos = Math.floor((diferencia % (1000 * 60 * 60)) / (1000 * 60));
+            const segundos = Math.floor((diferencia % (1000 * 60)) / 1000);
+
+            document.getElementById("contador").innerHTML = 
+                dias + " días <br>" + 
+                horas + " horas <br>" + 
+                minutos + " minutos <br>" + 
+                segundos + " segundos";
+        }
+
+        // Esto hace que el reloj se actualice cada segundo
+        setInterval(actualizarReloj, 1000);
+        actualizarReloj();
+    </script>
+</body>
+</html>
