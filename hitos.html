@@ -69,17 +69,15 @@
         <h1>Tiempo desde... ⏳</h1>
         
         <div id="lista-hitos">
-            <!-- Los cronómetros se generan aquí automáticamente -->
         </div>
         
         <a href="index.html" class="btn-volver">Volver al inicio</a>
     </div>
 
     <script>
-        // Lista con todos vuestros momentos y fechas
         const eventos = [
             { id: "beso", nombre: "Nuestro primer beso", fecha: new Date("2024-07-27T00:00:00") },
-            { id: "tequiero", nombre: 'La primera vez que me dijo "Te quiero"', fecha: new Date("2024-10-18T00:00:00") },
+            { id: "tequiero", nombre: 'La primera vez que me dijiste "Te quiero"', fecha: new Date("2024-10-18T00:00:00") },
             { id: "viaje1", nombre: "Nuestro primer viaje juntos", fecha: new Date("2024-11-16T00:00:00") },
             { id: "concierto", nombre: "Nuestro primer concierto juntos", fecha: new Date("2025-04-25T00:00:00") },
             { id: "belgica", nombre: "Nuestro viaje a Bélgica", fecha: new Date("2026-09-01T00:00:00") }
@@ -87,7 +85,7 @@
 
         const contenedorHitos = document.getElementById("lista-hitos");
 
-        // Crea las tarjetas HTML para cada evento
+
         eventos.forEach(evento => {
             contenedorHitos.innerHTML += `
                 <div class="tarjeta-hito">
@@ -97,7 +95,6 @@
             `;
         });
 
-        // Función que actualiza los hitos en formato años/meses/días
         function actualizarTodosLosHitos() {
             const ahora = new Date();
 
@@ -122,7 +119,6 @@
                 if (meses > 0) textoReloj += meses + (meses === 1 ? " mes, " : " meses, ");
                 textoReloj += dias + (dias === 1 ? " día" : " días");
 
-                // Por si da la casualidad de que el evento fue hoy mismo
                 if (anios === 0 && meses === 0 && dias === 0) {
                     textoReloj = "¡Hoy!";
                 }
@@ -131,7 +127,6 @@
             });
         }
 
-        // Ejecutar la función
         setInterval(actualizarTodosLosHitos, 1000);
         actualizarTodosLosHitos();
     </script>
