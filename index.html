@@ -22,12 +22,13 @@
             max-width: 90%;
             width: 400px;
             margin: 0 auto;
+            position: relative; 
         }
         h1 {
             color: #e06c75;
             font-size: 1.5em;
         }
-        img {
+        .foto-principal {
             max-width: 100%;
             border-radius: 10px;
             margin-top: 15px;
@@ -51,6 +52,60 @@
             color: #61afef;
             font-style: italic;
             margin-top: 25px;
+            margin-bottom: 10px;
+        }
+        
+    
+        .icono-huevo {
+            position: absolute;
+            bottom: 15px;
+            right: 20px;
+            font-size: 20px;
+            cursor: pointer;
+            opacity: 0.1; 
+            transition: all 0.3s;
+        }
+        .icono-huevo:hover {
+            opacity: 1; 
+            transform: scale(1.2);
+        }
+
+        #modal-vale {
+            display: none; 
+            position: fixed; 
+            top: 0; left: 0; width: 100%; height: 100%; 
+            background: rgba(0,0,0,0.85); 
+            z-index: 999; 
+            justify-content: center; 
+            align-items: center; 
+            flex-direction: column;
+        }
+        #modal-vale img {
+            max-width: 85%;
+            max-height: 70%;
+            border-radius: 15px;
+            box-shadow: 0 10px 30px rgba(0,0,0,1);
+            animation: aparecer 0.4s ease-out;
+        }
+        @keyframes aparecer {
+            from { transform: scale(0.5); opacity: 0; }
+            to { transform: scale(1); opacity: 1; }
+        }
+        .btn-cerrar {
+            margin-top: 25px;
+            padding: 12px 24px;
+            font-size: 16px;
+            background-color: #e06c75;
+            color: white;
+            border: none;
+            border-radius: 8px;
+            cursor: pointer;
+            font-family: inherit;
+            font-weight: bold;
+            transition: 0.2s;
+        }
+        .btn-cerrar:hover {
+            background-color: #be5058;
         }
     </style>
 </head>
@@ -58,7 +113,7 @@
     <div class="contenedor">
         <h1>Te quiero ❤️</h1>
         
-        <img src="Fondo.png" alt="Nosotros">
+        <img src="Fondo.png" alt="Nosotros" class="foto-principal">
         
         <p>Cuanto tiempo llevas haciendome la persona más feliz del mundo:</p>
         
@@ -69,6 +124,14 @@
         <div class="reloj" id="contador-dias">Cargando datos...</div>
         
         <p class="mensaje">Eres el amor de mi vida &lt;3</p>
+
+        <div class="icono-huevo" onclick="abrirVale()" title="¿Qué es esto?">🐕</div>
+    </div>
+
+
+    <div id="modal-vale">
+        <img src="vale_perro.jpg" alt="Vale por un perro salchicha">
+        <button class="btn-cerrar" onclick="cerrarVale()">¡Acepto el trato!</button>
     </div>
 
     <script>
@@ -76,8 +139,8 @@
 
         function actualizarReloj() {
             const ahora = new Date();
-            
             const diferencia = ahora.getTime() - inicio.getTime();
+            
             const totalDias = Math.floor(diferencia / (1000 * 60 * 60 * 24));
             const horas = Math.floor((diferencia % (1000 * 60 * 60 * 24)) / (1000 * 60 * 60));
             const minutos = Math.floor((diferencia % (1000 * 60 * 60)) / (1000 * 60));
@@ -98,7 +161,6 @@
                 const ultimoDiaMesAnterior = new Date(ahora.getFullYear(), ahora.getMonth(), 0).getDate();
                 dias += ultimoDiaMesAnterior;
             }
-
             if (meses < 0) {
                 anios--;
                 meses += 12;
@@ -119,6 +181,15 @@
 
         setInterval(actualizarReloj, 1000);
         actualizarReloj();
+
+
+        function abrirVale() {
+            document.getElementById("modal-vale").style.display = "flex";
+        }
+
+        function cerrarVale() {
+            document.getElementById("modal-vale").style.display = "none";
+        }
     </script>
 </body>
 </html>
