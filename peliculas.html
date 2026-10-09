@@ -1,0 +1,146 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <meta name="robots" content="noindex, nofollow">
+    <title>Nuestras Películas</title>
+    <style>
+        body {
+            font-family: 'Courier New', Courier, monospace;
+            background-color: #282c34;
+            color: #abb2bf;
+            text-align: center;
+            padding: 40px 20px;
+            margin: 0;
+        }
+        .contenedor {
+            background: #21252b;
+            padding: 30px;
+            border-radius: 15px;
+            box-shadow: 0 10px 20px rgba(0,0,0,0.5);
+            max-width: 90%;
+            width: 450px;
+            margin: 0 auto;
+        }
+        h1 {
+            color: #e06c75;
+            font-size: 1.5em;
+            margin-bottom: 30px;
+        }
+        .lista-peliculas {
+            text-align: left;
+            margin-bottom: 30px;
+            padding: 0;
+            list-style: none;
+        }
+        .pelicula {
+            background-color: #282c34;
+            margin-bottom: 15px;
+            padding: 15px;
+            border-radius: 10px;
+            border-left: 5px solid #e5c07b; /* Amarillo por defecto para las que faltan */
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            font-size: 1.1em;
+            transition: 0.3s;
+        }
+        .pelicula.vista {
+            border-left-color: #98c379; /* Se pone Verde si ya está vista */
+            opacity: 0.6;
+        }
+        .pelicula.vista .titulo {
+            text-decoration: line-through;
+            color: #5c6370;
+        }
+        .icono {
+            font-size: 1.3em;
+        }
+        .btn-volver {
+            display: inline-block;
+            margin-top: 10px;
+            padding: 10px 25px;
+            background-color: #e06c75;
+            color: white;
+            text-decoration: none;
+            border-radius: 8px;
+            font-weight: bold;
+            transition: 0.3s;
+        }
+        .btn-volver:hover {
+            background-color: #be5058;
+            transform: scale(1.05);
+        }
+        #estado {
+            color: #61afef;
+            font-style: italic;
+            margin-bottom: 20px;
+        }
+    </style>
+</head>
+<body>
+    <div class="contenedor">
+        <h1>Cine Juntos 🍿</h1>
+        
+        <div id="estado">Conectando con la base de datos...</div>
+        
+        <ul class="lista-peliculas" id="contenedor-peliculas">
+            <!-- Las películas aparecerán aquí automáticamente desde el Excel -->
+        </ul>
+        
+        <a href="index.html" class="btn-volver">Volver al inicio</a>
+    </div>
+
+    <script>
+        // PEGA ENTRE LAS COMILLAS EL ENLACE (.csv) QUE COPIASTE DE TU EXCEL
+        const URL_EXCEL = https://docs.google.com/spreadsheets/d/e/2PACX-1vTvWQx8A2hBf5KyCTjp4uVbzSuvsIAqG57pgUYuKkNc2QjjRHgxLU2VsXtmG-My2ZSocrm1tsmZ7h81/pub?output=csv;
+
+        const contenedorPeliculas = document.getElementById("contenedor-peliculas");
+        const estado = document.getElementById("estado");
+
+        if (URL_EXCEL === "PEGA_TU_ENLACE_AQUI_DENTRO") {
+            estado.innerHTML = "⚠️ ¡Te falta pegar el enlace del Excel en el código!";
+        } else {
+            // Esto lee el Excel mágicamente
+            fetch(URL_EXCEL)
+                .then(respuesta => respuesta.text())
+                .then(datosCSV => {
+                    estado.style.display = "none";
+                    
+                    // Separamos por filas
+                    const filas = datosCSV.split(/\r?\n/);
+                    
+                    // Empezamos desde el número 1 para saltarnos los títulos (Título, Vista)
+                    for (let i = 1; i < filas.length; i++) {
+                        const fila = filas[i].trim();
+                        if (!fila) continue;
+                        
+                        // Separamos por la coma
+                        const columnas = fila.split(",");
+                        const titulo = columnas[0];
+                        const estadoVista = columnas[1] ? columnas[1].trim().toLowerCase() : "no";
+
+                        // Si en el Excel pone "Sí", "si" o "yes", la marcamos como vista
+                        const esVista = (estadoVista === "sí" || estadoVista === "si");
+
+                        // Creamos la tarjeta de la película
+                        const li = document.createElement("li");
+                        li.className = "pelicula" + (esVista ? " vista" : "");
+                        
+                        li.innerHTML = `
+                            <span class="titulo">${titulo}</span>
+                            <span class="icono">${esVista ? "✅" : "🎬"}</span>
+                        `;
+                        
+                        contenedorPeliculas.appendChild(li);
+                    }
+                })
+                .catch(error => {
+                    estado.innerHTML = "❌ Error al cargar. Comprueba el enlace.";
+                    console.error(error);
+                });
+        }
+    </script>
+</body>
+</html>
