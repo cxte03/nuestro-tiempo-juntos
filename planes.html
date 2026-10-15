@@ -86,7 +86,6 @@
         <div id="estado">Cargando planes...</div>
         
         <ul class="lista-planes" id="contenedor-planes">
-            <!-- Los planes aparecerán aquí automáticamente desde el Excel -->
         </ul>
         
         <a href="index.html" class="btn-volver">Volver al inicio</a>
@@ -115,7 +114,6 @@
                         
                         const columnas = fila.split(",");
                         const titulo = columnas[0];
-                        // Leemos la segunda columna. Si pone "sí" o "si", cuenta como hecho.
                         const estadoHecho = columnas[1] ? columnas[1].trim().toLowerCase() : "no";
 
                         const esHecho = (estadoHecho === "sí" || estadoHecho === "si" || estadoHecho === "Sí" || estadoHecho === "Si");
