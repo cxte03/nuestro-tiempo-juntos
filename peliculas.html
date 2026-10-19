@@ -28,6 +28,19 @@
             font-size: 1.5em;
             margin-bottom: 30px;
         }
+        
+        /* --- ESTILOS NUEVOS PARA LAS CATEGORÍAS --- */
+        .categoria-titulo {
+            color: #61afef;
+            font-size: 1.3em;
+            margin-top: 30px;
+            margin-bottom: 15px;
+            border-bottom: 2px dashed #5c6370;
+            padding-bottom: 5px;
+            text-align: left;
+        }
+        /* ---------------------------------------- */
+
         .lista-peliculas {
             text-align: left;
             margin-bottom: 30px;
@@ -85,8 +98,7 @@
         
         <div id="estado">Cargando películas...</div>
         
-        <ul class="lista-peliculas" id="contenedor-peliculas">
-        </ul>
+        <div id="contenedor-peliculas"></div>
         
         <a href="index.html" class="btn-volver">Volver al inicio</a>
     </div>
@@ -100,13 +112,14 @@
         if (URL_EXCEL === "PEGA_TU_ENLACE_AQUI_DENTRO") {
             estado.innerHTML = "⚠️ ¡Te falta pegar el enlace del Excel en el código!";
         } else {
-            // Esto lee el Excel mágicamente
             fetch(URL_EXCEL)
                 .then(respuesta => respuesta.text())
                 .then(datosCSV => {
                     estado.style.display = "none";
                     
                     const filas = datosCSV.split(/\r?\n/);
+                    
+                    const peliculasPorCategoria = {};
                     
                     for (let i = 1; i < filas.length; i++) {
                         const fila = filas[i].trim();
@@ -115,18 +128,45 @@
                         const columnas = fila.split(",");
                         const titulo = columnas[0];
                         const estadoVista = columnas[1] ? columnas[1].trim().toLowerCase() : "no";
+                        
+                        // Leemos la tercera columna. Si la dejas en blanco, la mete en "Otros"
+                        const categoria = columnas[2] ? columnas[2].trim() : "Otros";
 
                         const esVista = (estadoVista === "sí" || estadoVista === "si");
 
-                        const li = document.createElement("li");
-                        li.className = "pelicula" + (esVista ? " vista" : "");
+                        if (!peliculasPorCategoria[categoria]) {
+                            peliculasPorCategoria[categoria] = [];
+                        }
+
+                        peliculasPorCategoria[categoria].push({
+                            titulo: titulo,
+                            esVista: esVista
+                        });
+                    }
+
+                    for (const categoria in peliculasPorCategoria) {
                         
-                        li.innerHTML = `
-                            <span class="titulo">${titulo}</span>
-                            <span class="icono">${esVista ? "✅" : "🎬"}</span>
-                        `;
-                        
-                        contenedorPeliculas.appendChild(li);
+                        const tituloCategoria = document.createElement("h2");
+                        tituloCategoria.className = "categoria-titulo";
+                        tituloCategoria.textContent = categoria;
+                        contenedorPeliculas.appendChild(tituloCategoria);
+
+                        const ul = document.createElement("ul");
+                        ul.className = "lista-peliculas";
+
+                        peliculasPorCategoria[categoria].forEach(peli => {
+                            const li = document.createElement("li");
+                            li.className = "pelicula" + (peli.esVista ? " vista" : "");
+                            
+                            li.innerHTML = `
+                                <span class="titulo">${peli.titulo}</span>
+                                <span class="icono">${peli.esVista ? "✅" : "🎬"}</span>
+                            `;
+                            ul.appendChild(li);
+                        });
+
+            na
+                        contenedorPeliculas.appendChild(ul);
                     }
                 })
                 .catch(error => {
