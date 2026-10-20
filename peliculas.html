@@ -101,7 +101,6 @@
     </div>
 
     <script>
-        // TU ENLACE AL EXCEL
         const URL_EXCEL = "https://docs.google.com/spreadsheets/d/e/2PACX-1vTvWQx8A2hBf5KyCTjp4uVbzSuvsIAqG57pgUYuKkNc2QjjRHgxLU2VsXtmG-My2ZSocrm1tsmZ7h81/pub?output=csv";
 
         const contenedorPeliculas = document.getElementById("contenedor-peliculas");
@@ -115,19 +114,15 @@
                 const filas = datosCSV.split(/\r?\n/);
                 const peliculasPorCategoria = {};
                 
-                // Empezamos desde la fila 0 para no perdernos ninguna película
                 for (let i = 0; i < filas.length; i++) {
                     const fila = filas[i].trim();
                     if (!fila) continue;
                     
-                    // Detecta si tu Excel usa comas o puntos y comas
                     const separador = fila.includes(";") ? ";" : ",";
                     const columnas = fila.split(separador);
                     
-                    // Limpiamos el texto por si tiene comillas raras
                     let titulo = columnas[0] ? columnas[0].replace(/^"|"$/g, '').trim() : "Película sin título";
                     
-                    // Si detecta que la fila es la de las cabeceras ("Título", "Vista"), la salta
                     if (titulo.toLowerCase() === "título" || titulo.toLowerCase() === "titulo") {
                         continue;
                     }
@@ -135,7 +130,6 @@
                     let estadoVista = columnas[1] ? columnas[1].replace(/^"|"$/g, '').trim().toLowerCase() : "no";
                     let categoria = columnas[2] ? columnas[2].replace(/^"|"$/g, '').trim() : "Otros";
 
-                    // Si dejaste la categoría en blanco en alguna peli
                     if (categoria === "") {
                         categoria = "Otros";
                     }
@@ -152,7 +146,6 @@
                     });
                 }
 
-                // Renderizamos las categorías en la pantalla
                 for (const categoria in peliculasPorCategoria) {
                     const tituloCategoria = document.createElement("h2");
                     tituloCategoria.className = "categoria-titulo";
