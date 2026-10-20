@@ -1,5 +1,3 @@
-CON TIPOLOGÍA DE PELÍCULAS
-
 <!DOCTYPE html>
 <html lang="es">
 <head>
@@ -30,8 +28,6 @@ CON TIPOLOGÍA DE PELÍCULAS
             font-size: 1.5em;
             margin-bottom: 30px;
         }
-        
-        /* --- ESTILOS NUEVOS PARA LAS CATEGORÍAS --- */
         .categoria-titulo {
             color: #61afef;
             font-size: 1.3em;
@@ -40,9 +36,8 @@ CON TIPOLOGÍA DE PELÍCULAS
             border-bottom: 2px dashed #5c6370;
             padding-bottom: 5px;
             text-align: left;
+            text-transform: capitalize;
         }
-        /* ---------------------------------------- */
-
         .lista-peliculas {
             text-align: left;
             margin-bottom: 30px;
@@ -98,7 +93,7 @@ CON TIPOLOGÍA DE PELÍCULAS
     <div class="contenedor">
         <h1>Cine Juntos 🍿</h1>
         
-        <div id="estado">Cargando películas...</div>
+        <div id="estado">Cargando la cartelera...</div>
         
         <div id="contenedor-peliculas"></div>
         
@@ -106,76 +101,85 @@ CON TIPOLOGÍA DE PELÍCULAS
     </div>
 
     <script>
+        // TU ENLACE AL EXCEL
         const URL_EXCEL = "https://docs.google.com/spreadsheets/d/e/2PACX-1vTvWQx8A2hBf5KyCTjp4uVbzSuvsIAqG57pgUYuKkNc2QjjRHgxLU2VsXtmG-My2ZSocrm1tsmZ7h81/pub?output=csv";
 
         const contenedorPeliculas = document.getElementById("contenedor-peliculas");
         const estado = document.getElementById("estado");
 
-        if (URL_EXCEL === "PEGA_TU_ENLACE_AQUI_DENTRO") {
-            estado.innerHTML = "⚠️ ¡Te falta pegar el enlace del Excel en el código!";
-        } else {
-            fetch(URL_EXCEL)
-                .then(respuesta => respuesta.text())
-                .then(datosCSV => {
-                    estado.style.display = "none";
+        fetch(URL_EXCEL)
+            .then(respuesta => respuesta.text())
+            .then(datosCSV => {
+                estado.style.display = "none";
+                
+                const filas = datosCSV.split(/\r?\n/);
+                const peliculasPorCategoria = {};
+                
+                // Empezamos desde la fila 0 para no perdernos ninguna película
+                for (let i = 0; i < filas.length; i++) {
+                    const fila = filas[i].trim();
+                    if (!fila) continue;
                     
-                    const filas = datosCSV.split(/\r?\n/);
+                    // Detecta si tu Excel usa comas o puntos y comas
+                    const separador = fila.includes(";") ? ";" : ",";
+                    const columnas = fila.split(separador);
                     
-                    const peliculasPorCategoria = {};
+                    // Limpiamos el texto por si tiene comillas raras
+                    let titulo = columnas[0] ? columnas[0].replace(/^"|"$/g, '').trim() : "Película sin título";
                     
-                    for (let i = 1; i < filas.length; i++) {
-                        const fila = filas[i].trim();
-                        if (!fila) continue;
-                        
-                        const columnas = fila.split(",");
-                        const titulo = columnas[0];
-                        const estadoVista = columnas[1] ? columnas[1].trim().toLowerCase() : "no";
-                        
-                        // Leemos la tercera columna. Si la dejas en blanco, la mete en "Otros"
-                        const categoria = columnas[2] ? columnas[2].trim() : "Otros";
-
-                        const esVista = (estadoVista === "sí" || estadoVista === "si");
-
-                        if (!peliculasPorCategoria[categoria]) {
-                            peliculasPorCategoria[categoria] = [];
-                        }
-
-                        peliculasPorCategoria[categoria].push({
-                            titulo: titulo,
-                            esVista: esVista
-                        });
+                    // Si detecta que la fila es la de las cabeceras ("Título", "Vista"), la salta
+                    if (titulo.toLowerCase() === "título" || titulo.toLowerCase() === "titulo") {
+                        continue;
                     }
 
-                    for (const categoria in peliculasPorCategoria) {
-                        
-                        const tituloCategoria = document.createElement("h2");
-                        tituloCategoria.className = "categoria-titulo";
-                        tituloCategoria.textContent = categoria;
-                        contenedorPeliculas.appendChild(tituloCategoria);
+                    let estadoVista = columnas[1] ? columnas[1].replace(/^"|"$/g, '').trim().toLowerCase() : "no";
+                    let categoria = columnas[2] ? columnas[2].replace(/^"|"$/g, '').trim() : "Otros";
 
-                        const ul = document.createElement("ul");
-                        ul.className = "lista-peliculas";
-
-                        peliculasPorCategoria[categoria].forEach(peli => {
-                            const li = document.createElement("li");
-                            li.className = "pelicula" + (peli.esVista ? " vista" : "");
-                            
-                            li.innerHTML = `
-                                <span class="titulo">${peli.titulo}</span>
-                                <span class="icono">${peli.esVista ? "✅" : "🎬"}</span>
-                            `;
-                            ul.appendChild(li);
-                        });
-
-            na
-                        contenedorPeliculas.appendChild(ul);
+                    // Si dejaste la categoría en blanco en alguna peli
+                    if (categoria === "") {
+                        categoria = "Otros";
                     }
-                })
-                .catch(error => {
-                    estado.innerHTML = "❌ Error al cargar. Comprueba el enlace.";
-                    console.error(error);
-                });
-        }
+
+                    const esVista = (estadoVista === "sí" || estadoVista === "si" || estadoVista === "yes");
+
+                    if (!peliculasPorCategoria[categoria]) {
+                        peliculasPorCategoria[categoria] = [];
+                    }
+
+                    peliculasPorCategoria[categoria].push({
+                        titulo: titulo,
+                        esVista: esVista
+                    });
+                }
+
+                // Renderizamos las categorías en la pantalla
+                for (const categoria in peliculasPorCategoria) {
+                    const tituloCategoria = document.createElement("h2");
+                    tituloCategoria.className = "categoria-titulo";
+                    tituloCategoria.textContent = categoria;
+                    contenedorPeliculas.appendChild(tituloCategoria);
+
+                    const ul = document.createElement("ul");
+                    ul.className = "lista-peliculas";
+
+                    peliculasPorCategoria[categoria].forEach(peli => {
+                        const li = document.createElement("li");
+                        li.className = "pelicula" + (peli.esVista ? " vista" : "");
+                        
+                        li.innerHTML = `
+                            <span class="titulo">${peli.titulo}</span>
+                            <span class="icono">${peli.esVista ? "✅" : "🎬"}</span>
+                        `;
+                        ul.appendChild(li);
+                    });
+
+                    contenedorPeliculas.appendChild(ul);
+                }
+            })
+            .catch(error => {
+                estado.innerHTML = "❌ Error al cargar. Comprueba el enlace.";
+                console.error(error);
+            });
     </script>
 </body>
 </html>
